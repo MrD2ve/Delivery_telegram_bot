@@ -1,4 +1,4 @@
-from telegram import ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 from geopy_experiment import geopy_location
 import methods
@@ -17,7 +17,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 ADMIN_ID = 2039331574
-TOKEN = "7905285533:AAGLbQIfpEb-GrHnqa8pvi67DEAVRC3mim4"
+TOKEN = "7254875700:AAF0fTO6ZBP__i30o-gKQU3AoHuW4Dt3hF4"
 
 db = Database("db-evos.db")
 
@@ -36,7 +36,6 @@ def contact_handler(update, context):
 def location_handler(update, context):
     db_user = db.get_user_by_chat_id(update.message.from_user.id)
     location = update.message.location
-    query = update.callback_query
     payment_type = context.user_data.get("payment_type", None)
     db.create_order(db_user['id'], context.user_data.get("carts", {}), payment_type, location)
 
@@ -53,7 +52,7 @@ def location_handler(update, context):
         text += f"\n{globals.ALL[db_user['lang_id']]}: {total_price} {globals.SUM[db_user['lang_id']]}"
         address = geopy_location(location.latitude, location.longitude)
         region = str(address).split(',')
-        if region[0] == "Muborak tumani" or region[1] == " Muborak tumani":
+        if region[0] == "Muborak tumani" or region[1] == " Muborak tumani" or region[2] == " Muborak tumani" or region[3] == " Muborak tumani":
             context.bot.send_message(
                 chat_id=update.message.from_user.id,
                 text=f"<b>{globals.FINISHING[db_user['lang_id']]}</b>\n\n"
